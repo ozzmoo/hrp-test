@@ -59,6 +59,7 @@
         </div>
 
         <div class="card character">
+          <!--
           <img v-if="isNaked" :src="nakedHeroImg" class="hero" />
           <img v-else :src="heroImg" class="hero" />
 
@@ -67,6 +68,9 @@
           <img :src="selectedGloves.img" class="equip-item gloves" />
           <img :src="selectedBoots.img" class="equip-item boots" />
           <img :src="selectedSword.img" class="equip-item sword" />
+          -->
+          <Character :itemSet = "saveItemSet" :heroImg="heroImg" :nakedHeroImg="nakedHeroImg"/>
+
           <div class="stats">
             <p class="stats-name-label">Name:</p>
             <p class="stats-name">{{heroName}}</p>
@@ -136,11 +140,12 @@
 <script>
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import Character from "./Character"
 
 export default {
   name: "Equipment",
   components: {
-    vSelect
+    vSelect, Character
   },
   data: () => ({
     heroName: "", //
@@ -155,7 +160,8 @@ export default {
     selectedChest: "", //
     selectedGloves: "", //  Хранят выбранную экипировку
     selectedBoots: "", //
-    selectedSword: "" //
+    selectedSword: "",//
+
   }),
   methods: {
     // Снимаем всю экипировку с персонажа
@@ -165,7 +171,8 @@ export default {
       this.selectedGloves = "";
       this.selectedBoots = "";
       this.selectedSword = "";
-    }
+    },
+    
   },
   computed: {
     /*
@@ -206,13 +213,20 @@ export default {
       } else {
         return true;
       }
+    }, 
+    saveItemSet(){
+      let itemSet = {}
+      itemSet['helmet'] = this.selectedHelmet.img
+      itemSet['chest'] = this.selectedChest.img
+      itemSet['gloves'] = this.selectedGloves.img
+      itemSet['boots'] = this.selectedBoots.img
+      itemSet['sword'] = this.selectedSword.img
+      return itemSet
     }
   },
   //Подгрузка JSONа с данными
   created() {
     let equipJson = require("../json/equipment.json");
-
-    
 
     this.heroName = equipJson.person.name;
     this.baseAttack = equipJson.person.attack;
@@ -343,11 +357,6 @@ li {
   position: relative;
 }
 
-.hero {
-  position: absolute;
-  top: 41px;
-  left: 118px;
-}
 
 /*Stats*/
 .stats {
@@ -400,34 +409,4 @@ li {
   grid-column: 3/4;
 }
 
-/*Items*/
-.helmet {
-  position: absolute;
-  top: 50px;
-  left: 130px;
-}
-
-.chest {
-  position: absolute;
-  top: 126px;
-  left: 135px;
-}
-
-.gloves {
-  position: absolute;
-  top: 193px;
-  left: 80px;
-}
-
-.boots {
-  position: absolute;
-  top: 293px;
-  left: 120px;
-}
-/*Меч исходного размера вылезал за край окна*/
-.sword {
-  width: 70%;
-  position: absolute;
-  top: 235px;
-}
 </style>
