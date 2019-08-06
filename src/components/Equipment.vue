@@ -128,7 +128,6 @@
             </svg>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -144,23 +143,22 @@ export default {
     vSelect
   },
   data: () => ({
-    heroName: "",           //              
-    baseAttack: 0,          //
-    baseHealth: 0,          // Базовые хар-ки, берутся из JSONа
-    baseArmor: 0,           //
-    heroImg: "",            //
-    nakedHeroImg: "",       //
-    equipment: {},          //
+    heroName: "", //
+    baseAttack: 0, //
+    baseHealth: 0, // Базовые хар-ки, берутся из JSONа
+    baseArmor: 0, //
+    heroImg: "", //
+    nakedHeroImg: "", //
+    equipment: {}, //
 
-    selectedHelmet: "",     //
-    selectedChest: "",      //
-    selectedGloves: "",     //  Хранят выбранную экипировку
-    selectedBoots: "",      //
-    selectedSword: "",      //
-
+    selectedHelmet: "", //
+    selectedChest: "", //
+    selectedGloves: "", //  Хранят выбранную экипировку
+    selectedBoots: "", //
+    selectedSword: "" //
   }),
   methods: {
-    // Снимаем всю экипировку с персонажа 
+    // Снимаем всю экипировку с персонажа
     cleanCharacter() {
       this.selectedHelmet = "";
       this.selectedChest = "";
@@ -204,19 +202,16 @@ export default {
     /*Проверяем есть ли на персе шлем, чтобы убрать хвост */
     isNaked() {
       if (this.selectedHelmet != "") {
-        return false
+        return false;
       } else {
-        return true
+        return true;
       }
     }
   },
   //Подгрузка JSONа с данными
   created() {
-    try {
-      let equipJson = require("../json/equipment.json");
-    } catch {
-      alert("Не удалось загрузить данные с сервера")
-    }
+    let equipJson = require("../json/equipment.json");
+
     
 
     this.heroName = equipJson.person.name;
@@ -316,9 +311,9 @@ export default {
   cursor: pointer;
 }
 
-.vs__actions svg{
+.vs__actions svg {
   width: 8px;
-height: 4px;
+  height: 4px;
 }
 
 .delim {
@@ -336,7 +331,7 @@ height: 4px;
   margin-left: calc(370px / 2 - 140px / 2);
   margin-right: auto;
   background-color: #fff;
-  border: 1px solid rgba(60,60,60,.26);
+  border: 1px solid rgba(60, 60, 60, 0.26);
   border-radius: 4px;
 }
 
@@ -364,7 +359,6 @@ li {
   height: 100px;
   margin-top: 394px;
   margin-left: 100px;
-  
 }
 
 .stats p {
