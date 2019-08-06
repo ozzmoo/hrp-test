@@ -18,6 +18,9 @@ export default {
 
 <style>
 *{margin: 0px; padding: 0px;}
-.vs__clear { visibility: hidden;
-display: none; }
+
+.vs__clear { 
+  visibility: hidden;
+  display: none; 
+}
 </style>

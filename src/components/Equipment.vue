@@ -55,7 +55,7 @@
           <div class="delim"></div>
 
           <h3 class="cost">Equipment cost: {{totalStats.cost}}</h3>
-          <button class="remove-items" @click="cleanCharacter">Раздеть</button>
+          <button class="remove-items" @click="cleanCharacter">Снять снаряжение</button>
         </div>
 
         <div class="card character">
@@ -128,6 +128,7 @@
             </svg>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
@@ -143,28 +144,30 @@ export default {
     vSelect
   },
   data: () => ({
-    heroName: "",
-    baseAttack: 0,
-    baseHealth: 0,
-    baseArmor: 0,
-    heroImg: "",
-    nakedHeroImg: "",
-    equipment: {},
-    selectedHelmet: "",
-    selectedChest: "",
-    selectedGloves: "",
-    selectedBoots: "",
-    selectedSword: ""
+    heroName: "",           //              
+    baseAttack: 0,          //
+    baseHealth: 0,          // Базовые хар-ки, берутся из JSONа
+    baseArmor: 0,           //
+    heroImg: "",            //
+    nakedHeroImg: "",       //
+    equipment: {},          //
+
+    selectedHelmet: "",     //
+    selectedChest: "",      //
+    selectedGloves: "",     //  Хранят выбранную экипировку
+    selectedBoots: "",      //
+    selectedSword: "",      //
+
   }),
   methods: {
+    // Снимаем всю экипировку с персонажа 
     cleanCharacter() {
       this.selectedHelmet = "";
       this.selectedChest = "";
       this.selectedGloves = "";
       this.selectedBoots = "";
       this.selectedSword = "";
-
-    },
+    }
   },
   computed: {
     /*
@@ -198,7 +201,7 @@ export default {
 
       return total;
     },
-    /*!УБРАТЬ (еще один костыль, проверяет есть ли на персе шлем, чтобы убрать хвост) */
+    /*Проверяем есть ли на персе шлем, чтобы убрать хвост */
     isNaked() {
       if (this.selectedHelmet != "") {
         return false
@@ -207,9 +210,14 @@ export default {
       }
     }
   },
-
+  //Подгрузка JSONа с данными
   created() {
-    let equipJson = require("../json/equipment.json");
+    try {
+      let equipJson = require("../json/equipment.json");
+    } catch {
+      alert("Не удалось загрузить данные с сервера")
+    }
+    
 
     this.heroName = equipJson.person.name;
     this.baseAttack = equipJson.person.attack;
@@ -322,12 +330,13 @@ height: 4px;
 }
 
 .remove-items {
-  width: 100px;
+  width: 140px;
   height: 30px;
   margin-top: 20px;
-  margin-left: calc(370px / 2 - 100px / 2);
+  margin-left: calc(370px / 2 - 140px / 2);
   margin-right: auto;
   background-color: #fff;
+  border: 1px solid rgba(60,60,60,.26);
   border-radius: 4px;
 }
 
