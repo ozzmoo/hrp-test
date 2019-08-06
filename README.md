@@ -1,4 +1,9 @@
 # hrp-test
+Тестовое задание на позицию Разработчик JavaScript / Junior
+
+demo : http://hrp-test-ozzmo.surge.sh
+
+mestervalera@gmail.com
 
 ## Project setup
 ```
