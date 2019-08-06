@@ -55,20 +55,16 @@
           <div class="delim"></div>
 
           <h3 class="cost">Equipment cost: {{totalStats.cost}}</h3>
+
+          <button class="remove-items" @click="createRandomSet">Случайный сет</button>
           <button class="remove-items" @click="cleanCharacter">Снять снаряжение</button>
+          
+
+
         </div>
 
         <div class="card character">
-          <!--
-          <img v-if="isNaked" :src="nakedHeroImg" class="hero" />
-          <img v-else :src="heroImg" class="hero" />
 
-          <img :src="selectedHelmet.img" class="equip-item helmet" />
-          <img :src="selectedChest.img" class="equip-item chest" />
-          <img :src="selectedGloves.img" class="equip-item gloves" />
-          <img :src="selectedBoots.img" class="equip-item boots" />
-          <img :src="selectedSword.img" class="equip-item sword" />
-          -->
           <Character :itemSet = "saveItemSet" :heroImg="heroImg" :nakedHeroImg="nakedHeroImg"/>
 
           <div class="stats">
@@ -172,7 +168,21 @@ export default {
       this.selectedBoots = "";
       this.selectedSword = "";
     },
-    
+    //Генерируем случайный сет 
+    // (0, 2) захардкожено для экономии места
+    createRandomSet(){
+      this.selectedHelmet = this.equipment.helmets[this.randInt(0, 2)]
+      this.selectedChest  = this.equipment.chests[this.randInt(0, 2)]
+      this.selectedGloves = this.equipment.gloves[this.randInt(0, 2)]
+      this.selectedBoots  = this.equipment.boots[this.randInt(0, 2)]
+      this.selectedSword  = this.equipment.swords[this.randInt(0, 2)]
+    },
+
+    randInt(min, max) {
+      const rand = min + Math.random() * (max + 1 - min);
+      return Math.floor(rand);
+    }
+        
   },
   computed: {
     /*
@@ -403,8 +413,8 @@ li {
   grid-column: 3/4;
 }
 .stats-icon-attack {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   grid-row: 4/5;
   grid-column: 3/4;
 }
