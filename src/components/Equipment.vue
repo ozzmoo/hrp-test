@@ -58,14 +58,10 @@
 
           <button class="remove-items" @click="createRandomSet">Случайный сет</button>
           <button class="remove-items" @click="cleanCharacter">Снять снаряжение</button>
-          
-
-
         </div>
 
         <div class="card character">
-
-          <Character :itemSet = "saveItemSet" :heroImg="heroImg" :nakedHeroImg="nakedHeroImg"/>
+          <Character :itemSet="saveItemSet" :heroImg="heroImg" :nakedHeroImg="nakedHeroImg" />
 
           <div class="stats">
             <p class="stats-name-label">Name:</p>
@@ -134,14 +130,16 @@
 </template>
 
 <script>
+import axios from "axios";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import Character from "./Character"
+import Character from "./Character";
 
 export default {
   name: "Equipment",
   components: {
-    vSelect, Character
+    vSelect,
+    Character
   },
   data: () => ({
     heroName: "", //
@@ -156,8 +154,7 @@ export default {
     selectedChest: "", //
     selectedGloves: "", //  Хранят выбранную экипировку
     selectedBoots: "", //
-    selectedSword: "",//
-
+    selectedSword: "" //
   }),
   methods: {
     // Снимаем всю экипировку с персонажа
@@ -168,21 +165,20 @@ export default {
       this.selectedBoots = "";
       this.selectedSword = "";
     },
-    //Генерируем случайный сет 
+    //Генерируем случайный сет
     // (0, 2) захардкожено для экономии места
-    createRandomSet(){
-      this.selectedHelmet = this.equipment.helmets[this.randInt(0, 2)]
-      this.selectedChest  = this.equipment.chests[this.randInt(0, 2)]
-      this.selectedGloves = this.equipment.gloves[this.randInt(0, 2)]
-      this.selectedBoots  = this.equipment.boots[this.randInt(0, 2)]
-      this.selectedSword  = this.equipment.swords[this.randInt(0, 2)]
+    createRandomSet() {
+      this.selectedHelmet = this.equipment.helmets[this.randInt(0, 2)];
+      this.selectedChest = this.equipment.chests[this.randInt(0, 2)];
+      this.selectedGloves = this.equipment.gloves[this.randInt(0, 2)];
+      this.selectedBoots = this.equipment.boots[this.randInt(0, 2)];
+      this.selectedSword = this.equipment.swords[this.randInt(0, 2)];
     },
 
     randInt(min, max) {
       const rand = min + Math.random() * (max + 1 - min);
       return Math.floor(rand);
     }
-        
   },
   computed: {
     /*
@@ -223,28 +219,34 @@ export default {
       } else {
         return true;
       }
-    }, 
-    saveItemSet(){
-      let itemSet = {}
-      itemSet['helmet'] = this.selectedHelmet.img
-      itemSet['chest'] = this.selectedChest.img
-      itemSet['gloves'] = this.selectedGloves.img
-      itemSet['boots'] = this.selectedBoots.img
-      itemSet['sword'] = this.selectedSword.img
-      return itemSet
+    },
+    saveItemSet() {
+      let itemSet = {};
+      itemSet["helmet"] = this.selectedHelmet.img;
+      itemSet["chest"] = this.selectedChest.img;
+      itemSet["gloves"] = this.selectedGloves.img;
+      itemSet["boots"] = this.selectedBoots.img;
+      itemSet["sword"] = this.selectedSword.img;
+      return itemSet;
     }
   },
   //Подгрузка JSONа с данными
   created() {
-    let equipJson = require("../json/equipment.json");
-
-    this.heroName = equipJson.person.name;
-    this.baseAttack = equipJson.person.attack;
-    this.baseHealth = equipJson.person.health;
-    this.baseArmor = equipJson.person.armor;
-    this.nakedHeroImg = equipJson.person.img;
-    this.heroImg = equipJson.person["alt-img"];
-    this.equipment = equipJson.equipment;
+    axios
+      .get("https://hrp-serv.herokuapp.com/json")
+      .then(response => {
+        const equipJson = response.data;
+        this.heroName = equipJson.person.name;
+        this.baseAttack = equipJson.person.attack;
+        this.baseHealth = equipJson.person.health;
+        this.baseArmor = equipJson.person.armor;
+        this.nakedHeroImg = equipJson.person.img;
+        this.heroImg = equipJson.person["alt-img"];
+        this.equipment = equipJson.equipment;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 };
 </script>
@@ -367,7 +369,6 @@ li {
   position: relative;
 }
 
-
 /*Stats*/
 .stats {
   display: grid;
@@ -418,5 +419,4 @@ li {
   grid-row: 4/5;
   grid-column: 3/4;
 }
-
 </style>
