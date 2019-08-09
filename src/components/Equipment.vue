@@ -7,48 +7,53 @@
           <ul class="shop-menus">
             <li>
               <p>Helmet</p>
-              <v-select
-                class="shop-select"
-                label="name"
-                :options="equipment.helmets"
-                v-model="selectedHelmet"
-              ></v-select>
+              <ItemSelect
+                :isCleared="isCleared"
+                :equipment="equipment.helmets"
+                :label="'helmets'"
+                @selectedItem="saveSelectedItem"
+                @removeSelectedItem="removeSelectedItem"
+              />
             </li>
             <li>
               <p>Chest</p>
-              <v-select
-                class="shop-select"
-                label="name"
-                :options="equipment.chests"
-                v-model="selectedChest"
-              ></v-select>
+              <ItemSelect
+                :isCleared="isCleared"
+                :equipment="equipment.chests"
+                :label="'chests'"
+                @selectedItem="saveSelectedItem"
+                @removeSelectedItem="removeSelectedItem"
+              />
             </li>
             <li>
               <p>Gloves</p>
-              <v-select
-                class="shop-select"
-                label="name"
-                :options="equipment.gloves"
-                v-model="selectedGloves"
-              ></v-select>
+              <ItemSelect
+                :isCleared="isCleared"
+                :equipment="equipment.gloves"
+                :label="'gloves'"
+                @selectedItem="saveSelectedItem"
+                @removeSelectedItem="removeSelectedItem"
+              />
             </li>
             <li>
               <p>Boots</p>
-              <v-select
-                class="shop-select"
-                label="name"
-                :options="equipment.boots"
-                v-model="selectedBoots"
-              ></v-select>
+              <ItemSelect
+                :isCleared="isCleared"
+                :equipment="equipment.boots"
+                :label="'boots'"
+                @selectedItem="saveSelectedItem"
+                @removeSelectedItem="removeSelectedItem"
+              />
             </li>
             <li>
               <p>Sword</p>
-              <v-select
-                class="shop-select"
-                label="name"
-                :options="equipment.swords"
-                v-model="selectedSword"
-              ></v-select>
+              <ItemSelect
+                :isCleared="isCleared"
+                :equipment="equipment.swords"
+                :label="'swords'"
+                @selectedItem="saveSelectedItem"
+                @removeSelectedItem="removeSelectedItem"
+              />
             </li>
           </ul>
 
@@ -56,7 +61,6 @@
 
           <h3 class="cost">Equipment cost: {{totalStats.cost}}</h3>
 
-          <button class="remove-items" @click="createRandomSet">Случайный сет</button>
           <button class="remove-items" @click="cleanCharacter">Снять снаряжение</button>
         </div>
 
@@ -131,15 +135,14 @@
 
 <script>
 import axios from "axios";
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
 import Character from "./Character";
+import ItemSelect from "./ItemSelect";
 
 export default {
   name: "Equipment",
   components: {
-    vSelect,
-    Character
+    Character,
+    ItemSelect
   },
   data: () => ({
     heroName: "", //
@@ -149,42 +152,63 @@ export default {
     heroImg: "", //
     nakedHeroImg: "", //
     equipment: {}, //
-
+    selectedItems: {},
     selectedHelmet: "", //
     selectedChest: "", //
     selectedGloves: "", //  Хранят выбранную экипировку
     selectedBoots: "", //
-    selectedSword: "" //
+    selectedSword: "", //
+    isCleared: false
   }),
   methods: {
     // Снимаем всю экипировку с персонажа
     cleanCharacter() {
+      this.isCleared = !this.isCleared
+              
       this.selectedHelmet = "";
       this.selectedChest = "";
       this.selectedGloves = "";
       this.selectedBoots = "";
       this.selectedSword = "";
+      this.selectedItems = {};
     },
-    //Генерируем случайный сет
-    // (0, 2) захардкожено для экономии места
-    createRandomSet() {
-      this.selectedHelmet = this.equipment.helmets[this.randInt(0, 2)];
-      this.selectedChest = this.equipment.chests[this.randInt(0, 2)];
-      this.selectedGloves = this.equipment.gloves[this.randInt(0, 2)];
-      this.selectedBoots = this.equipment.boots[this.randInt(0, 2)];
-      this.selectedSword = this.equipment.swords[this.randInt(0, 2)];
-    },
+    saveSelectedItem(data) {
+      this.selectedItems[data.label] = data.value;
 
-    randInt(min, max) {
-      const rand = min + Math.random() * (max + 1 - min);
-      return Math.floor(rand);
+      if (this.selectedItems["helmets"])
+        this.selectedHelmet = this.selectedItems["helmets"];
+      if (this.selectedItems["chests"])
+        this.selectedChest = this.selectedItems["chests"];
+      if (this.selectedItems["gloves"])
+        this.selectedGloves = this.selectedItems["gloves"];
+      if (this.selectedItems["boots"])
+        this.selectedBoots = this.selectedItems["boots"];
+      if (this.selectedItems["swords"])
+        this.selectedSword = this.selectedItems["swords"];
+    },
+    removeSelectedItem(data) {
+      this.selectedItems[data.label] = "";
+      this.saveState();
+    },
+    saveState() {
+      if (this.selectedHelmet)
+        this.selectedHelmet = this.selectedItems["helmets"];
+      if (this.selectedChest) 
+        this.selectedChest = this.selectedItems["chests"];
+      if (this.selectedGloves)
+        this.selectedGloves = this.selectedItems["gloves"];
+      if (this.selectedBoots) 
+        this.selectedBoots = this.selectedItems["boots"];
+      if (this.selectedSword) 
+      this.selectedSword = this.selectedItems["swords"];
     }
   },
+  
   computed: {
     /*
     Это такой жуткий костыль который следит за изменениями в показателях выбранных предметов
     */
-    totalStats: function() {
+    totalStats() {
       const items = [
         this.selectedHelmet,
         this.selectedChest,
@@ -247,7 +271,7 @@ export default {
       .catch(error => {
         console.log(error);
       });
-  }
+  },
 };
 </script>
 
