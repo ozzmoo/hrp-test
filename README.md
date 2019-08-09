@@ -3,6 +3,8 @@
 
 demo : http://hrp-test-ozzmo.surge.sh
 
+JSON подхватывается с моего сервера (https://hrp-serv.herokuapp.com/json) простым гет запросом. Сам сервер тянет файл с (http://test.datalb.ru/test.json). Напрямую сделать не удалось из-за CORS
+
 mestervalera@gmail.com
 
 ## Project setup
